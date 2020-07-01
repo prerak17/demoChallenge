@@ -173,10 +173,10 @@ class CreateFlag extends Component {
 							<CustomInput
 								type='radio'
 								className="radioButton"
-								id="loan"
+								id="loan_car"
 								name="type"
-								checked={flagForm.type === 'loan'}
-								value='loan'
+								checked={flagForm.type === 'loan_car'}
+								value='loan_car'
 								onChange={this.radioHandler}
 								label='Loan Cars'
 							/>

@@ -38,7 +38,7 @@ class MainPage extends Component {
     if (flagList !== prevProps.flagList) {
       this.setState({
         jobsList: flagList.filter((x, i) => x.type === 'job'),
-        loanList: flagList.filter((x, i) => x.type === 'loan'),
+        loanList: flagList.filter((x, i) => x.type === 'loan_car'),
         tasksList: flagList.filter((x, i) => x.type === 'task'),
       });
     }
@@ -114,7 +114,7 @@ class MainPage extends Component {
       arr = jobsList;
       name = 'jobsList';
     }
-    else if (job.type === 'loan') {
+    else if (job.type === 'loan_car') {
       arr = loanList;
       name = 'loanList';
     }
@@ -161,7 +161,7 @@ class MainPage extends Component {
       },
       loans: {
         name: 'Loan Cars',
-        type: 'loan',
+        type: 'loan_car',
         mainArr: loanList,
         categories: {
           Uncategorised: [],
