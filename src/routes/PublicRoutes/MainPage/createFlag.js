@@ -7,25 +7,16 @@ import {
 	FormGroup, Label, Input,
 	Modal, ModalBody, ModalHeader, ModalFooter, Button, Card, CustomInput
 } from 'reactstrap';
-import { getFlagListAsync, getCategpriesListAsync, onAddFlagAsync } from '../../../redux/account/actions';
+import { getFlagListAsync, getCategpriesListAsync, onAddFlagAsync, onUpdateFlagAsync } from '../../../redux/account/actions';
 import './index.css';
 
+const colorValue = (flagForm) => flagForm.colour && flagForm.colour.includes('#') ? flagForm.colour : `#${flagForm.colour}`;
 
 class CreateFlag extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			flagForm: {
-				name: '',
-				tag: '',
-				type: props.type,
-				categories: [],
-				colour: '#ABB8C3',
-				pos: 1,
-				attributes: [
-					{ date_applicable: false },
-				],
-			},
+			flagForm: props.flagObject,
 			categoriesOptions: [],
 			displayColorPicker: false,
 		};
@@ -58,20 +49,34 @@ class CreateFlag extends Component {
 
 	//Save Event
 	modalSubmit = () => {
-		const { postAddFlag } = { ...this.props };
+		const { postAddFlag, postUpdatedFlag, editFlag } = { ...this.props };
 		const { flagForm } = this.state;
-		flagForm.colour = flagForm.colour.replace("#", '');
-		postAddFlag(flagForm).then((res) => {
-			if (res.payload && res.payload.data) {
-				window.toastr.success('Flag Added Successfully.');
-				this.props.toggle();
-				this.props.fetchList();
-			}
-		}).catch((err) => {
-			if (err) {
-				this.errorShow(err);
-			}
-		});
+		flagForm.colour = flagForm.colour ? flagForm.colour.replace("#", '') : '000000';
+		if (editFlag === true) {
+			postUpdatedFlag(flagForm).then((res) => {
+				if (res.payload && res.payload.data) {
+					window.toastr.success('Flag Updated Successfully.');
+					this.props.toggle();
+					this.props.fetchList();
+				}
+			}).catch((err) => {
+				if (err) {
+					this.errorShow(err);
+				}
+			});
+		} else {
+			postAddFlag(flagForm).then((res) => {
+				if (res.payload && res.payload.data) {
+					window.toastr.success('Flag Added Successfully.');
+					this.props.toggle();
+					this.props.fetchList();
+				}
+			}).catch((err) => {
+				if (err) {
+					this.errorShow(err);
+				}
+			});
+		}
 	}
 
 	//categories from API
@@ -96,13 +101,15 @@ class CreateFlag extends Component {
 
 	//error common function
 	errorShow = (err) => {
-		Object.values(err['errors']).map((x, i) => {
-			if (typeof x[0] === 'string') {
-				window.toastr.warning(x[0]);
+		if (err['errors']) {
+			Object.values(err['errors']).map((x, i) => {
+				if (typeof x[0] === 'string') {
+					window.toastr.warning(x[0]);
+					return null;
+				}
 				return null;
-			}
-			return null;
-		})
+			})
+		}
 	}
 
 	//colour picker functionality
@@ -146,7 +153,7 @@ class CreateFlag extends Component {
 
 	render() {
 		const { categoriesOptions, flagForm } = this.state;
-		const { isopen, toggle } = this.props;
+		const { isopen, toggle, editFlag } = this.props;
 		const popover = {
 			position: 'absolute',
 			zIndex: '2',
@@ -154,7 +161,7 @@ class CreateFlag extends Component {
 		}
 		return (
 			<Modal isOpen={isopen} toggle={toggle}>
-				<ModalHeader toggle={toggle} className="main-wrapper">Add Flag</ModalHeader>
+				<ModalHeader toggle={toggle} className="main-wrapper">{editFlag ? 'Edit Flag' : 'Add Flag'}</ModalHeader>
 				<ModalBody>
 					<div className="d-flex">
 						<div className="ml-3">
@@ -217,7 +224,7 @@ class CreateFlag extends Component {
 							onChange={this.onFieldChange}
 							maxLength={3}
 						/>
-						<span style={{ backgroundColor: `${flagForm.colour}`, borderRadius: '30px' }}
+						<span style={{ backgroundColor: `${colorValue(flagForm)}`, borderRadius: '30px' }}
 							className="col-1 ml-2 mr-2">
 						</span>
 						<Card className="main-card">
@@ -225,7 +232,7 @@ class CreateFlag extends Component {
 								Pick Color</Button>
 							{this.state.displayColorPicker ? <div style={popover}>
 								<TwitterPicker
-									color={flagForm.colour}
+									color={colorValue(flagForm)}
 									onChange={this.colourChange} />
 							</div> : null}
 						</Card>
@@ -237,8 +244,8 @@ class CreateFlag extends Component {
 							id="date_applicable"
 							name="date_applicable"
 							className="col-5 mt-2"
-							checked={flagForm.attributes[0].date_applicable}
-							value={flagForm.attributes[0].date_applicable}
+							checked={flagForm.attributes && flagForm.attributes.length > 0 && flagForm.attributes[0].date_applicable}
+							value={flagForm.attributes && flagForm.attributes.length > 0 && flagForm.attributes[0].date_applicable}
 							onChange={this.onCheckboxChange}
 							label='Date Applicable'
 						/>
@@ -277,6 +284,7 @@ const mapDispatchToProps = (dispatch) => (
 		fetchFlagList: (data) => dispatch(getFlagListAsync(data)),
 		fetchCategoriesList: (data) => dispatch(getCategpriesListAsync(data)),
 		postAddFlag: (data) => dispatch(onAddFlagAsync(data)),
+		postUpdatedFlag: (data) => dispatch(onUpdateFlagAsync(data)),
 	}
 );
 

@@ -5,7 +5,7 @@ import { FaPlusCircle, FaRegCalendar } from 'react-icons/fa';
 import {
   Container, Row, Button
 } from 'reactstrap';
-import { getFlagListAsync, getDragDropListAsync } from '../../../redux/account/actions';
+import { getFlagListAsync, getDragDropListAsync, updateData } from '../../../redux/account/actions';
 import './index.css';
 import CreateFlag from './createFlag';
 
@@ -17,15 +17,13 @@ class MainPage extends Component {
       loanList: [],
       jobsList: [],
       tasksList: [],
-      addModal: false,
       activeCategory: '',
-      flagForm: {
-        type: 'job',
-      },
       dragID: '',
       dragArray: [],
       activeID: '',
       activeDataArr: [],
+      addModal: false,
+      editFlag: false,
     };
   }
 
@@ -67,11 +65,8 @@ class MainPage extends Component {
 
   modalAdd = (name = '') => {
     this.setState({
-      flagForm: {
-        ...this.state.flagForm,
-        'type': name
-      },
-      addModal: !this.state.addModal
+      addModal: !this.state.addModal,
+      editFlag: false,
     })
   }
 
@@ -87,6 +82,9 @@ class MainPage extends Component {
   }
   onClickOfJob = (job) => {
     this.setState({ activeID: job.id, activeDataArr: [], activeCategory: '' })
+    let { updateFormList } = { ...this.props }
+    updateFormList(job);
+    this.setState({ addModal: !this.state.addModal, editFlag: true });
   }
 
   //Drag & Drop Functionality
@@ -149,7 +147,7 @@ class MainPage extends Component {
 
   render() {
     const { flagList } = { ...this.props }
-    const { loanList, jobsList, tasksList, activeDataArr, flagForm, activeID, activeCategory, addModal } = this.state;
+    const { loanList, jobsList, tasksList, activeDataArr, editFlag, activeID, activeCategory, addModal } = this.state;
     let arr = {
       jobs: {
         name: 'Jobs',
@@ -244,10 +242,12 @@ class MainPage extends Component {
                 <Row className="ml-3 mt-3">
                   {x.mainArr.map((job, j) => {
                     return <div key={j} id={j} draggable="true"
+                      className={`d-flex mainData ${activeClass(job.id)} ${job.id === activeID && 'activeJob'}`}
                       onDrop={(event) => this.onDrop(event, job, j)}
                       onDragStart={(ev) => this.draggableData(ev, job)}
                       onDragOver={(event) => this.onDragOver(event, job)}
-                      className={`d-flex mainData ${activeClass(job.id)} ${job.id === activeID && 'activeJob'}`} onClick={() => this.onClickOfJob(job)}>
+                      onClick={() => this.onClickOfJob(job)}
+                    >
                       <span className="tag" style={{ backgroundColor: `#${job.colour}` }}>
                         {job.tag}
                       </span>
@@ -271,8 +271,8 @@ class MainPage extends Component {
           <CreateFlag
             isopen={addModal}
             toggle={this.modalAdd}
-            type={flagForm.type}
             fetchList={this.fetchList}
+            editFlag={editFlag}
           />
         }
       </Container>
@@ -284,6 +284,7 @@ class MainPage extends Component {
 const mapStateToProps = (state) => (
   {
     flagList: state.account.flagList,
+    flagObject: state.account.flagObj,
   }
 );
 
@@ -292,6 +293,7 @@ const mapDispatchToProps = (dispatch) => (
   {
     fetchFlagList: (data) => dispatch(getFlagListAsync(data)),
     dragDropList: (data) => dispatch(getDragDropListAsync(data)),
+    updateFormList: (data) => dispatch(updateData(data)),
   }
 );
 

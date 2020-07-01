@@ -2,9 +2,11 @@
 /* eslint-disable import/no-cycle */
 import network from './network';
 
-// ---------------------------- Manage Account SignUp, SignIn, ForgotPassword, ResetPassword, VerifyAccount --------------------------------
+// ---------------------------- Manage Add, Update, Delete --------------------------------
 
 export const postAddFlag = (payload) => network.publicPost('', payload);
+
+export const putUpdateFlag = (payload) => network.publicPut(`${payload.id}`, payload);
 
 export const getFlagListData = (payload) => network.publicGet('', payload);
 

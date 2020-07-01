@@ -18,7 +18,7 @@ const intitialAccountState = {
 //different Reducers for different Lists
 const accountReducer = (state = intitialAccountState, { type, payload }) => {
   switch (type) {
-    case types.ADDFLAG_ACCOUNT:
+    case types.FLAG_OBJECT:
       return { ...state, flagObj: intitialAccountState };
     case types.FLAGS_LIST:
       return { ...state, flagList: payload };
@@ -26,6 +26,8 @@ const accountReducer = (state = intitialAccountState, { type, payload }) => {
       return { ...state, categoryList: payload };
     case types.UPDATE_FLAGS_LIST:
       return { ...state };
+    case types.UPDATE_FORM:
+      return { ...state, flagObj: payload };
     default:
       return state;
   }
