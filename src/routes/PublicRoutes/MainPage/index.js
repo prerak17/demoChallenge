@@ -173,6 +173,7 @@ class MainPage extends Component {
     if (event.keyCode === 46) {
       if (window.confirm(`Are you sure you want to delete ${job.name} Flag?`)) {
         deleteFlag(job).then((res) => {
+          console.log(res)
           if (res.payload && res.payload.data) {
             window.toastr.success('Flag Deleted Successfully.');
             this.fetchList();

@@ -5,7 +5,7 @@ import * as api from '../../services/api';
 // sync action
 export const registeredFlag = (data) => ({ type: accountActionTypes.FLAG_OBJECT, payload: data });
 
-export const deletedFlag = (data) => ({ payload: data });
+export const deletedFlag = (data) => ({ type: accountActionTypes.DELETE_LIST, payload: data });
 
 export const setFlagList = (data) => ({ type: accountActionTypes.FLAGS_LIST, payload: data });
 

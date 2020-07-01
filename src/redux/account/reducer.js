@@ -26,6 +26,8 @@ const accountReducer = (state = intitialAccountState, { type, payload }) => {
       return { ...state, categoryList: payload };
     case types.UPDATE_FLAGS_LIST:
       return { ...state };
+    case types.DELETE_LIST:
+      return { ...state };
     case types.UPDATE_FORM:
       return { ...state, flagObj: payload };
     default:

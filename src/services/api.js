@@ -8,7 +8,7 @@ export const postAddFlag = (payload) => network.publicPost('', payload);
 
 export const putUpdateFlag = (payload) => network.publicPut(`${payload.id}`, payload);
 
-export const deleteFlag = (payload) => network.publicRemove(`${payload.id}`, {});
+export const deleteFlag = (payload) => network.publicRemove(`${payload.id}`, payload);
 
 export const getFlagListData = (payload) => network.publicGet('', payload);
 
