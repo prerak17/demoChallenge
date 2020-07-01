@@ -10,11 +10,10 @@ import './index.css';
 import CreateFlag from './createFlag';
 
 
-class LandingPage extends Component {
+class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // flagList: [],
       loanList: [],
       jobsList: [],
       tasksList: [],
@@ -45,16 +44,21 @@ class LandingPage extends Component {
     }
   }
 
+  //error common function
+  errorShow = (err) => {
+    Object.values(err['errors']).map((x, i) => {
+      if (typeof x[0] === 'string') {
+        window.toastr.warning(x[0]);
+        return null;
+      }
+      return null;
+    })
+  }
+
   fetchList = () => {
     const { fetchFlagList } = { ...this.props };
     fetchFlagList({}).then((res) => {
       // if (res.payload && res.payload.length > 0) {
-      // this.setState({
-      // flagList: flagList,
-      // jobsList: flagList.filter((x, i) => x.type === 'job'),
-      // loanList: flagList.filter((x, i) => x.type === 'loan'),
-      // tasksList: flagList.filter((x, i) => x.type === 'task'),
-      // });
       // }
     }).catch((err) => {
       this.errorShow(err);
@@ -70,6 +74,8 @@ class LandingPage extends Component {
       addModal: !this.state.addModal
     })
   }
+
+  //Categories Click Event
   onClickOfCategories = (cat) => {
     this.setState({ activeDataArr: [], activeID: '' });
     let arr = [];
@@ -82,6 +88,8 @@ class LandingPage extends Component {
   onClickOfJob = (job) => {
     this.setState({ activeID: job.id, activeDataArr: [], activeCategory: '' })
   }
+
+  //Drag & Drop Functionality
 
   draggableData = (ev, job) => {
     this.setState({ dragID: ev.target.id })
@@ -137,16 +145,6 @@ class LandingPage extends Component {
     }).catch((err) => {
       this.errorShow(err);
     });
-  }
-
-  errorShow = (err) => {
-    Object.values(err['errors']).map((x, i) => {
-      if (typeof x[0] === 'string') {
-        window.toastr.warning(x[0]);
-        return null;
-      }
-      return null;
-    })
   }
 
   render() {
@@ -282,12 +280,14 @@ class LandingPage extends Component {
   }
 }
 
+//All FlagList From Redux
 const mapStateToProps = (state) => (
   {
     flagList: state.account.flagList,
   }
 );
 
+//API Calls through Redux
 const mapDispatchToProps = (dispatch) => (
   {
     fetchFlagList: (data) => dispatch(getFlagListAsync(data)),
@@ -295,4 +295,4 @@ const mapDispatchToProps = (dispatch) => (
   }
 );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LandingPage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainPage));

@@ -15,6 +15,7 @@ const intitialAccountState = {
   flagList: [],
 };
 
+//different Reducers for different Lists
 const accountReducer = (state = intitialAccountState, { type, payload }) => {
   switch (type) {
     case types.ADDFLAG_ACCOUNT:

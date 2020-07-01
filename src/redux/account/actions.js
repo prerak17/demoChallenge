@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import accountActionTypes from './type';
-// eslint-disable-next-line import/no-cycle
 import * as api from '../../services/api';
 
 // sync action

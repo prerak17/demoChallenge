@@ -56,6 +56,7 @@ class CreateFlag extends Component {
 		});
 	};
 
+	//Save Event
 	modalSubmit = () => {
 		const { postAddFlag } = { ...this.props };
 		const { flagForm } = this.state;
@@ -73,6 +74,7 @@ class CreateFlag extends Component {
 		});
 	}
 
+	//categories from API
 	loadOptions = () => {
 		const { fetchCategoriesList } = { ...this.props };
 		fetchCategoriesList({}).then((res) => {
@@ -92,6 +94,7 @@ class CreateFlag extends Component {
 		});
 	}
 
+	//error common function
 	errorShow = (err) => {
 		Object.values(err['errors']).map((x, i) => {
 			if (typeof x[0] === 'string') {
@@ -102,6 +105,7 @@ class CreateFlag extends Component {
 		})
 	}
 
+	//colour picker functionality
 	pickColour = () => {
 		this.setState({ displayColorPicker: !this.state.displayColorPicker })
 	};
@@ -116,6 +120,7 @@ class CreateFlag extends Component {
 		})
 	}
 
+	//radioButton
 	radioHandler = ev => {
 		this.setState({
 			flagForm: {
@@ -125,6 +130,7 @@ class CreateFlag extends Component {
 		});
 	}
 
+	//SelectOptions
 	handleOptionsChange = selectedOption => {
 		let arr = [];
 		if (selectedOption && selectedOption.length > 0) {
@@ -258,12 +264,14 @@ class CreateFlag extends Component {
 	}
 }
 
+//FlagObject From Redux
 const mapStateToProps = (state) => (
 	{
 		flagObject: state.account.flagObj,
 	}
 );
 
+//API Calls through Redux
 const mapDispatchToProps = (dispatch) => (
 	{
 		fetchFlagList: (data) => dispatch(getFlagListAsync(data)),

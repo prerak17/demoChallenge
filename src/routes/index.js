@@ -1,11 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import LandingPage from './PublicRoutes/LandingPage';
+import MainPage from './PublicRoutes/MainPage';
 
+//Main Routing File
 const index = () => (
   <Router>
     <Switch>
-      <Route exact path="/" component={LandingPage} />
+      <Route exact path="/" component={MainPage} />
     </Switch>
   </Router>
 );
