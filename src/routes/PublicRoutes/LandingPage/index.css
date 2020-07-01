@@ -1,0 +1,67 @@
+.categoriesLength{
+    background-color: rgba(0,0,0,.06);
+    width: 20px;
+}
+
+.main-wrapper{
+  background-color: #f1f4f6 !important;
+    /* background-color: #f1f4f6; */
+    color: #545b62;
+}
+
+.tag{
+    padding: 5px;
+    width: 45px;
+}
+
+.name{
+    padding: 5px;
+}
+
+.mainData{
+    padding: 1px;
+    text-align: center;
+    background-color: white;
+    margin: 0 15px 15px 0;
+    color: black !important;
+}
+
+.activeData {
+    border: dotted blue;
+    padding: 0px !important;
+    border-radius:3px;
+}
+
+.activeCategory {
+    color: blue;
+}
+.activeJob{
+    border: solid black;
+    padding: 0px !important;
+    border-radius:3px;
+}
+.buttonBack{
+    background-color: unset !important;
+    color: #545b62 !important;
+    border: none !important;
+    font-weight: bold !important;
+}
+
+button:hover {
+    outline: none !important;
+}
+
+button:focus{
+    outline: none !important;
+}
+
+.heading{
+    color: #545b62;
+    margin-top: 0.5rem;
+}
+.radioButton{    
+    background-color: #f1f4f6;
+margin: 5px;
+padding: 5px 15px 5px 30px !important;
+border-radius: 20px;
+}
