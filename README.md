@@ -1,10 +1,9 @@
 ﻿# demoChallenge
  
 # Process
-
-git clone https://github.com/prerak17/demoChallenge.git
-npm i
-npm start
+###### git clone https://github.com/prerak17/demoChallenge.git
+###### npm i
+###### npm start
 
 # URL : http://localhost:3000
 
