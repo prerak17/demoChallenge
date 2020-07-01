@@ -66,10 +66,26 @@ class MainPage extends Component {
   }
 
   modalAdd = (name = '') => {
+    let { updateFormList } = { ...this.props }
     this.setState({
       addModal: !this.state.addModal,
       editFlag: false,
+      activeCategory: '',
+      activeID: '',
+      activeDataArr: [],
     })
+    let flagObj = {
+      name: '',
+      tag: '',
+      type: name,
+      categories: [],
+      colour: '#ABB8C3',
+      pos: 1,
+      attributes: [
+        { date_applicable: false },
+      ],
+    }
+    updateFormList(flagObj);
   }
 
   //Categories Click Event
@@ -82,10 +98,13 @@ class MainPage extends Component {
       return null;
     })
   }
+
   onClickOfJob = (event, job) => {
+    let { updateFormList } = { ...this.props }
     this.setState({ activeID: job.id, activeDataArr: [], activeCategory: '' })
+
+    //Update Functionality
     if (event.detail === 2) {
-      let { updateFormList } = { ...this.props }
       updateFormList(job);
       this.setState({ addModal: !this.state.addModal, editFlag: true });
     }
@@ -148,7 +167,8 @@ class MainPage extends Component {
     });
   }
 
-  onHandleLinkSelection = (event, job) => {
+  //Delete Functionality
+  deleteSelectedFlag = (event, job) => {
     const { deleteFlag } = { ...this.props }
     if (event.keyCode === 46) {
       if (window.confirm(`Are you sure you want to delete ${job.name} Flag?`)) {
@@ -271,7 +291,7 @@ class MainPage extends Component {
                       onClick={(event) => this.onClickOfJob(event, job)}
                       role="textbox"
                       tabIndex={job.id}
-                      onKeyUp={e => this.onHandleLinkSelection(e, job)}
+                      onKeyUp={e => this.deleteSelectedFlag(e, job)}
                     >
                       <span className="tag" style={{ backgroundColor: `#${job.colour}` }}>
                         {job.tag}

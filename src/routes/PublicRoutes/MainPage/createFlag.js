@@ -159,6 +159,7 @@ class CreateFlag extends Component {
 			zIndex: '2',
 			top: '40px',
 		}
+
 		return (
 			<Modal isOpen={isopen} toggle={toggle}>
 				<ModalHeader toggle={toggle} className="main-wrapper">{editFlag ? 'Edit Flag' : 'Add Flag'}</ModalHeader>
