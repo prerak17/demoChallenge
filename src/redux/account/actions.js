@@ -5,6 +5,8 @@ import * as api from '../../services/api';
 // sync action
 export const registeredFlag = (data) => ({ type: accountActionTypes.FLAG_OBJECT, payload: data });
 
+export const deletedFlag = (data) => ({ payload: data });
+
 export const setFlagList = (data) => ({ type: accountActionTypes.FLAGS_LIST, payload: data });
 
 export const setCategoriesList = (data) => ({ type: accountActionTypes.CATEGORY_LIST, payload: data });
@@ -33,6 +35,9 @@ export const getCategpriesListAsync = () => (dispatch) => api.getCategoriesListD
 
 export const onAddFlagAsync = (regDetails) => (dispatch) => api.postAddFlag(regDetails)
   .then((response) => dispatch(registeredFlag(response.data)));
+
+export const onDeleteFlagAsync = (regDetails) => (dispatch) => api.deleteFlag(regDetails)
+  .then((response) => dispatch(deletedFlag(response.data)));
 
 export const onUpdateFlagAsync = (regDetails) => (dispatch) => api.putUpdateFlag(regDetails)
   .then((response) => dispatch(updateData(response.data)));

@@ -8,6 +8,8 @@ export const postAddFlag = (payload) => network.publicPost('', payload);
 
 export const putUpdateFlag = (payload) => network.publicPut(`${payload.id}`, payload);
 
+export const deleteFlag = (payload) => network.publicRemove(`${payload.id}`, {});
+
 export const getFlagListData = (payload) => network.publicGet('', payload);
 
 export const getCategoriesListData = (payload) => network.publicGet('categories', payload);

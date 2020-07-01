@@ -5,7 +5,7 @@ import { FaPlusCircle, FaRegCalendar } from 'react-icons/fa';
 import {
   Container, Row, Button
 } from 'reactstrap';
-import { getFlagListAsync, getDragDropListAsync, updateData } from '../../../redux/account/actions';
+import { getFlagListAsync, getDragDropListAsync, onDeleteFlagAsync, updateData } from '../../../redux/account/actions';
 import './index.css';
 import CreateFlag from './createFlag';
 
@@ -44,13 +44,15 @@ class MainPage extends Component {
 
   //error common function
   errorShow = (err) => {
-    Object.values(err['errors']).map((x, i) => {
-      if (typeof x[0] === 'string') {
-        window.toastr.warning(x[0]);
+    if (err['errors']) {
+      Object.values(err['errors']).map((x, i) => {
+        if (typeof x[0] === 'string') {
+          window.toastr.warning(x[0]);
+          return null;
+        }
         return null;
-      }
-      return null;
-    })
+      })
+    }
   }
 
   fetchList = () => {
@@ -80,15 +82,16 @@ class MainPage extends Component {
       return null;
     })
   }
-  onClickOfJob = (job) => {
+  onClickOfJob = (event, job) => {
     this.setState({ activeID: job.id, activeDataArr: [], activeCategory: '' })
-    let { updateFormList } = { ...this.props }
-    updateFormList(job);
-    this.setState({ addModal: !this.state.addModal, editFlag: true });
+    if (event.detail === 2) {
+      let { updateFormList } = { ...this.props }
+      updateFormList(job);
+      this.setState({ addModal: !this.state.addModal, editFlag: true });
+    }
   }
 
   //Drag & Drop Functionality
-
   draggableData = (ev, job) => {
     this.setState({ dragID: ev.target.id })
     let arr = [];
@@ -145,6 +148,25 @@ class MainPage extends Component {
     });
   }
 
+  onHandleLinkSelection = (event, job) => {
+    const { deleteFlag } = { ...this.props }
+    if (event.keyCode === 46) {
+      if (window.confirm(`Are you sure you want to delete ${job.name} Flag?`)) {
+        deleteFlag(job).then((res) => {
+          if (res.payload && res.payload.data) {
+            window.toastr.success('Flag Deleted Successfully.');
+            this.fetchList();
+          }
+        }).catch((err) => {
+          if (err) {
+            this.errorShow(err);
+          }
+        });
+      } else {
+        return null;
+      }
+    }
+  }
   render() {
     const { flagList } = { ...this.props }
     const { loanList, jobsList, tasksList, activeDataArr, editFlag, activeID, activeCategory, addModal } = this.state;
@@ -246,7 +268,10 @@ class MainPage extends Component {
                       onDrop={(event) => this.onDrop(event, job, j)}
                       onDragStart={(ev) => this.draggableData(ev, job)}
                       onDragOver={(event) => this.onDragOver(event, job)}
-                      onClick={() => this.onClickOfJob(job)}
+                      onClick={(event) => this.onClickOfJob(event, job)}
+                      role="textbox"
+                      tabIndex={job.id}
+                      onKeyUp={e => this.onHandleLinkSelection(e, job)}
                     >
                       <span className="tag" style={{ backgroundColor: `#${job.colour}` }}>
                         {job.tag}
@@ -294,6 +319,7 @@ const mapDispatchToProps = (dispatch) => (
     fetchFlagList: (data) => dispatch(getFlagListAsync(data)),
     dragDropList: (data) => dispatch(getDragDropListAsync(data)),
     updateFormList: (data) => dispatch(updateData(data)),
+    deleteFlag: (data) => dispatch(onDeleteFlagAsync(data))
   }
 );
 
